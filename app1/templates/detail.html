@@ -69,16 +69,14 @@
                                       method="post">
                                     <button class="btn btn-white btn-default"><i class="fa fa-star"></i> Add to wishlist
                                     </button>
-
                                     {% csrf_token %}
                                 </form>
-                                                                <a class="btn btn-white btn-default" href="{% url 'email' get_product.id %}"><i
-                                                                        class="fa fa-envelope"></i> Contact Seller</a>
+<!--                                   <a class="btn btn-white btn-default" href="{% url 'email' get_product.id %}"><i>-->
+                                   <a class="btn btn-white btn-default" href="{% url 'get_message' get_product.id %}"><i
+                                       class="fa fa-envelope">
+                                   </i> Contact Seller</a>
 
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        href="{% url 'get_message' %}" data-target="#exampleModalCenter">
-                                    Launch demo modal
-                                </button>
+
                             </div>
                         </div>
                     </div>
@@ -122,7 +120,7 @@
         <div class="col-3">
             <form action="" id="add_form" method="post">
                 {% csrf_token %}
-                <!--                {{ form }}-->
+                 {{ form }}
 
                 <button class="btn btn-success btn mt-2 mb-2" form="add_form" type="submit"> Submit</button>
         </div>
@@ -133,30 +131,5 @@
 
         {% endif %}
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{% url 'email' get_product.id %}" method="post" id="adds_form">
-                        {% csrf_token %}
-                        <input type='hidden' name='action' value='make_message'>
-                        <textarea name="message" placeholder="Message...."></textarea>
-                        <input type="submit" value="submit">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" form="adds_form" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     {% endblock %}

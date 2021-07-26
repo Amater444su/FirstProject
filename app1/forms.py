@@ -7,7 +7,6 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'text', 'price', 'image', 'type']
-        # изменить на ['name'], где в списке указываються поля модели
 
     def __init__(self,  *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,7 +43,7 @@ class MessageForm(forms.ModelForm):
 
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['topic', 'text']
 
     def __init__(self,  *args, **kwargs):
         super().__init__(*args, **kwargs)

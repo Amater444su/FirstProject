@@ -206,7 +206,7 @@ class CartView(LoginRequiredMixin, View, SuccessMessageMixin):
         return HttpResponseRedirect('/')
 
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(UpdateView, LoginRequiredMixin):
     """Обновление данных пользователя"""
     model = Profile
     form_class = UserForm
@@ -227,38 +227,18 @@ class ProductDeleteFromCartView(View):
         return HttpResponseRedirect('/cart/')
 
 
-def get_email(request, detail_id):
+def get_email(request, pk):
     """Отправка емейла владельцу товара"""
     # ipdb.set_trace()
-    action = request.POST['action']
-    message = 'qwe'
-    if request.method == 'POST' and action == 'make_message':
-        message = request.POST['message']
-    send_mail('Test subject', message, settings.EMAIL_HOST_USER, ['hikosif724@dmsdmg.com'], fail_silently=False)
-    context = {
-        # 'form': form
-    }
-    # return HttpResponseRedirect(reverse('detail', kwargs={'pk': detail_id}))
-    return render(request, 'detail.html', context)
+    message = Message.objects.get(id=pk+1)
+
+    send_mail(str(message.topic), str(message.text), settings.EMAIL_HOST_USER, ['hikosif724@dmsdmg.com'],
+              fail_silently=False)
+
+    return HttpResponseRedirect('/')
 
 
-class GetEmailView(View):
-
-    def post(self, request, detail_id):
-        user = request.user
-        product = Message.objects.filter(id=detail_id).first()
-        user_message, created = EmailMessage.objects.get_or_create(
-            writer=user,
-            defaults={
-                'to_user': 1,
-            }
-        )
-
-        user_message.products.add(product)
-        return HttpResponseRedirect(reverse('detail', kwargs={'pk': detail_id}))
-
-
-class WishListView(View):
+class WishListView(LoginRequiredMixin, View):
     """Список желаней пользователя"""
 
     def get(self, request, *args, **kwargs):
@@ -284,12 +264,12 @@ class WishListView(View):
         return HttpResponseRedirect(reverse('detail', kwargs={'pk': product_id}))
 
 
-class ProductDeleteFromWishListView(View):
+class ProductDeleteFromWishListView(LoginRequiredMixin, View):
     """Удаление связи список желаний и продукта"""
 
     def get(self, request, pk):
         # ipdb.set_trace()
-        user = request.user  # Достали юзера и записали юзера, который сейчас залогинен нас сайт
+        user = request.user
         product = Product.objects.filter(id=pk).first()
         wishlist = WishList.objects.filter(author=user).first()
         wishlist.products.remove(product)
@@ -297,9 +277,21 @@ class ProductDeleteFromWishListView(View):
         return HttpResponseRedirect('/profile/')
 
 
-class SendMessageView(CreateView):
-    """Вывод определенного товара с БД"""
+class SendMessageView(LoginRequiredMixin, CreateView):
+    """Cоздание сообщения"""
+    # ipdb.set_trace()
     model = Message
-    template_name = 'detail.html'
+    template_name = 'Message.html'
     context_object_name = 'message'
+    message = Message.objects.last()
     form_class = MessageForm
+    success_url = reverse_lazy('email', kwargs={'pk': message.id})
+
+    def form_valid(self, form):
+        #ipdb.set_trace()
+        user = Profile.objects.filter(id=self.request.user.id).first()
+        self.object = form.save(commit=False)
+        self.object.writer = self.request.user
+        self.object.email = user.email
+        self.object.save
+        return super().form_valid(form)

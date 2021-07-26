@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from allauth.account import urls
 from app1 import views
 
 
@@ -23,12 +22,12 @@ urlpatterns = [
     path('profile_update/<int:pk>', views.ProfileUpdateView.as_view(), name='profile_update'),
     path('profile_create/', views.ProfileProductCreateView.as_view(), name='profile_create'),
     path('cart/<int:pk>', views.ProductDeleteFromCartView.as_view(), name='cart_delete'),
-    path('email/<int:detail_id>', views.get_email, name='email'),
+    path('email/<int:pk>', views.get_email, name='email'),
     path('products/<int:product_id>/wishlist', views.WishListView.as_view(), name='add_to_wishlist'),
     path('wishlist/<int:pk>', views.ProductDeleteFromWishListView.as_view(), name='wishlist_delete'),
-    path('message/', views.SendMessageView.as_view(), name='get_message'),
+    path('message/<int:pk>', views.SendMessageView.as_view(), name='get_message'),
 
-    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ] + static(settings.STATIC_URL,     document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
