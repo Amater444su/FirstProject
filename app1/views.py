@@ -1,13 +1,12 @@
 import ipdb
 from django.conf import settings
-
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView, View
 from django.views.generic.edit import FormMixin
-from .models import Product, ProductType, Cart, Comment, Profile, WishList, Message, EmailMessage
+from .models import Product, ProductType, Cart, Comment, Profile, WishList, Message
 from .forms import ProductForm, CommentForm, UserForm, MessageForm
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -230,7 +229,7 @@ class ProductDeleteFromCartView(View):
 def get_email(request, pk):
     """Отправка емейла владельцу товара"""
     # ipdb.set_trace()
-    message = Message.objects.get(id=pk+1)
+    message = Message.objects.filter(id=pk+1).first()
 
     send_mail(str(message.topic), str(message.text), settings.EMAIL_HOST_USER, ['hikosif724@dmsdmg.com'],
               fail_silently=False)
@@ -286,6 +285,7 @@ class SendMessageView(LoginRequiredMixin, CreateView):
     message = Message.objects.last()
     form_class = MessageForm
     success_url = reverse_lazy('email', kwargs={'pk': message.id})
+
 
     def form_valid(self, form):
         #ipdb.set_trace()

@@ -83,7 +83,3 @@ class Message(models.Model):
     email = models.EmailField(verbose_name='Емейл', blank=True)
 
 
-class EmailMessage(models.Model):
-    author = models.OneToOneField(Profile, on_delete=models.CASCADE, verbose_name='Автор сообщения',
-                                  related_name='sender')
-    messages = models.ManyToManyField(Message, verbose_name='Сообщения', related_name='messages_rel')

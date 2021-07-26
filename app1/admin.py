@@ -1,11 +1,9 @@
 from django.contrib import admin
 from .models import (
     Product,
-    Cart,
     Profile,
     Comment,
     WishList,
-    EmailMessage,
     Message
 
 )
@@ -38,6 +36,5 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Comment)
 admin.site.register(WishList)
-admin.site.register(EmailMessage)
 admin.site.register(Message, MessageAdmin)
 
