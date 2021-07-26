@@ -1,0 +1,94 @@
+{% extends 'home.html' %}
+{% block content %}
+
+{% if messages %}
+    <div class="alert alert-success">
+    {% for m in messages %}
+        {{m}}
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% if update %}
+    <h4 class = "ml-4">Update Form</h4>
+
+
+    <form class="ml-4 mt-4" id="update_data" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+        </form>
+        <a href="{% url 'home' %}"><button form = "update_data" type="submit"
+                                                class="btn btn-primary ml-4 mt-4">Apply</button></a>
+
+{% else %}
+
+<!--<button type="button" class="btn btn-primary ml-4 mt-3" data-toggle="modal" data-target="#exampleModal">-->
+<!--  Create-->
+<!--</button>-->
+
+<table class="table ml-4 mt-4">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Author</th>
+      <th scope="col">Name</th>
+      <th scope="col">Info</th>
+      <th scope="col">Date</th>
+      <th scope="col">Delete</th>
+      <th scope="col">Update</th>
+    </tr>
+  </thead>
+  <tbody>
+     {% for i in list_product %}
+          <tr>
+              <th scope="row">{{i.id}}</th>
+              <td>{{i.author}}</td>
+              <td>{{i.name}}</td>
+              <td>{{i.text|truncatechars:"18"}}</td>
+              <td>{{i.create_data}}</td>
+              <td>
+                  <form action="{% url 'delete_page' i.id %}" method="post" onSubmit='return confirm("Для удаления нажмите OK?");' >{% csrf_token %}
+                         <a href="{% url 'delete_page' i.id %}" ><input class="btn btn-primary ml-4" type="submit" value="Delete">
+                        </a>
+                    </form>
+
+                </td>
+              <td>
+
+                  <a href="{% url 'update_page' i.id %}">
+                     <input class="btn btn-primary ml-4" type="submit" value="Update"></a>
+
+              </td>
+          </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+{% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="add_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button form = "add_form" type="submit" class="btn btn-primary">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

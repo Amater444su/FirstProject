@@ -1,0 +1,162 @@
+{% extends 'home.html' %}
+    {% block content %}
+    {% load static %}
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static '/app1/css/style.css' %}">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <!-- product -->
+        <div class="product-content product-wrap clearfix product-deatil shadow">
+            <div class="row">
+                <div class="col-md-5 col-sm-12 col-xs-12">
+                    <div class="product-image">
+                        <div id="myCarousel-2" class="carousel slide">
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel-2" data-slide-to="0" class=""></li>
+                                <li data-target="#myCarousel-2" data-slide-to="1" class="active"></li>
+                                <li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <!-- Slide 1 -->
+                                <div class="item active">
+                                    <img class="card-img-top" src='{{ get_product.image.url }}' alt="">
+                                </div>
+
+                            </div>
+                            <a class="left carousel-control" href="#myCarousel-2" data-slide="prev"> <span
+                                    class="glyphicon glyphicon-chevron-left"></span> </a>
+                            <a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span
+                                    class="glyphicon glyphicon-chevron-right"></span> </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-md-offset-1 col-sm-12 col-xs-12">
+                    <h2 class="name">
+                        {{ get_product.name }}
+                        <h5>Product by {{ get_product.author }}</h5>
+
+                        <span class="fa fa-2x"><h5>{{ likes.user }}</h5></span>
+                        <a href="javascript:void(0);">{{ likes.total_unlike }}</a>
+                    </h2>
+                    <hr/>
+                    <h3 class="price-container">
+                        {{get_product.text}}
+                        <hr/>
+                        <b>${{ get_product.price }}</b>
+
+
+                    </h3>
+
+
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <form action="{% url 'add_to_cart' get_product.id %}" class="form-inline" method="post">
+                                <button class="btn btn-success btn-lg" href="{% url 'add_to_cart' get_product.id %}">Add
+                                    to cart (${{ get_product.price }})
+                                </button>
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="btn-group pull-right">
+                                <form action="{% url 'add_to_wishlist' get_product.id %}" class="form-inline"
+                                      method="post">
+                                    <button class="btn btn-white btn-default"><i class="fa fa-star"></i> Add to wishlist
+                                    </button>
+
+                                    {% csrf_token %}
+                                </form>
+                                                                <a class="btn btn-white btn-default" href="{% url 'email' get_product.id %}"><i
+                                                                        class="fa fa-envelope"></i> Contact Seller</a>
+
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        href="{% url 'get_message' %}" data-target="#exampleModalCenter">
+                                    Launch demo modal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end product -->
+    </div>
+
+    <div class="col-sm-12 col-md-12 col-lg-12"><h4>Comments ({{get_product.product_comment.all.count}})</h4>
+
+        <ul>
+
+            {% for comment in get_product.product_comment.all %}
+            <div class="card mt-4" style="width: 18rem;">
+
+                <div class="card-body">
+                    <h5>{{ comment.text }} </h5>
+                    <p>Date: {{ comment.create_data }}</p> <br>
+                    By: {{ comment.author }}
+                </div>
+            </div>
+            {% if user == comment.author or user == get_product.author %}
+
+            </form>
+            <form action="{% url 'delete_comment' comment.id %}" method="post"
+                  onSubmit='return confirm("Для удаления нажмите OK?");'>{% csrf_token %}
+                <a href="{% url 'delete_comment' comment.id %}"><input align="right " class="btn btn-primary ml-4"
+                                                                       type="submit"
+                                                                       value="Delete">
+                </a>
+            </form>
+            <br><br>
+
+            {% endif %}
+
+            {% endfor %}
+        </ul>
+        <hr>
+        {% if user.is_authenticated %}
+        <div class="col-3">
+            <form action="" id="add_form" method="post">
+                {% csrf_token %}
+                <!--                {{ form }}-->
+
+                <button class="btn btn-success btn mt-2 mb-2" form="add_form" type="submit"> Submit</button>
+        </div>
+        {% else %}
+        <h4> Коментарии могут оставлять только зарегестрированые пользователи</h4>
+        <h4><a class="mb-1" href="{% url 'account_signup' %}">Создай свой аккаунт бесплатно</a> или
+            <a class="mb-1" href="{% url 'account_login' %}"> Войди в свой акк </a></h4>
+
+        {% endif %}
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'email' get_product.id %}" method="post" id="adds_form">
+                        {% csrf_token %}
+                        <input type='hidden' name='action' value='make_message'>
+                        <textarea name="message" placeholder="Message...."></textarea>
+                        <input type="submit" value="submit">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" form="adds_form" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

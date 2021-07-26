@@ -1,0 +1,198 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <title>Shoes Auction</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static '/app1/css/back_home.css' %}">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+        <style>
+   .round {
+    border-radius: 100px; /* Радиус скругления */
+   }
+  
+        </style>
+    </head>
+    <body>
+
+    <nav class="navbar navbar-expand-lg" style="background-color: #00123A;">
+        <a class="navbar-brand ml-4" href="{% url 'home' %}">
+            <img src="https://www.pngrepo.com/download/262755/auction.png" width="44" height="44" alt="">
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item active">
+                </li>
+                <li class="nav-item">
+                    {% if request.user.is_superuser %}
+                    <a class="nav-link" href="{% url 'edit_page' %}">CRUD</a>
+                    {% endif %}
+                </li>
+
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0">
+
+                <form action="" class="form-inline" method="get">
+
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="search"
+                           name='search'>
+                    <button class="btn btn-outline-light my-2 my-sm-0 mr-3" type="submit">Search</button>
+
+                </form>
+
+                {% if user.is_authenticated %}
+                <a class="ml-2" href="{% url 'profile_page' %}">
+                    <h4 class="mt-1" style="color: white;"><img class="round" title="{{ user.username }}"
+                                                                src="{{ user.profile_image.url }}" width="44"
+                                                                height="44"></h4></a>
+                <!--            <h4 class="mt-1" style="color: white;">{{ user.profile_image.url }}</h4></a>-->
+                <a class=" ml-2" href="{% url 'cart' %}">Корзина <span class="badge badge-pill badge-danger">{{ Cart.total_products }}</span></a>
+                <a class="btn btn-outline-light ml-4" href="{% url 'account_logout' %}">Log Out</a>
+                {% else %}
+                <a class=" btn btn-outline-light" href="{% url 'account_login' %}">Log in </a>
+                &emsp;
+                <a class="btn btn-outline-light" href="{% url 'account_signup' %}"> Sign up</a>
+                {% endif %}
+
+            </form>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% load static %}
+    <div class="container">
+
+        <div class="row">
+            <form action="{% url 'home' %}" method="get">
+
+
+                <h2 class="my-4 ml-2">Категории</h2>
+                <div class="list-group">
+
+                    {% for i,j in list_types %}
+
+                    <input class="list-group-item list-group-item-action mb-2" id="flexCheckDefault" name="type"
+                           value="{{ i }}" type="submit">
+
+                    {% endfor %}
+
+                </div>
+
+
+            </form>
+            <!-- /.col-lg-3 -->
+
+            <div class="col-lg-9 ml-4">
+
+                <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2" class=""></li>
+                    </ol>
+                    <div class="carousel-inner shadow" role="listbox">
+                        <div class="carousel-item active">
+                            <img class="d-block img-fluid" border="1"
+                                 src="https://ae01.alicdn.com/kf/HTB1qVqKennI8KJjy0Ffq6AdoVXa0.jpg?size=79182&height=350&width=900&hash=652ac2427773b7743b5185df67a5f341"
+                                 alt="First slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block img-fluid" border="1"
+                                 src="https://ae01.alicdn.com/kf/HTB1a0iESXXXXXcYXpXXq6xXFXXXl.jpg?size=133886&height=350&width=900&hash=80c96bc47a5da010b1f17ddea07fb29a"
+                                 alt="Second slide">
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block img-fluid" border="1"
+                                 src="https://www.shoes.hr/site/assets/files/1054/unknown-3-1.jpeg" alt="Third slide">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+
+
+                <div class="row">
+
+                    {% for i in list_products %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow">
+                            <a href="/detail/{{i.id}}"><img class="card-img-top" src='{{ i.image.url }}' alt=""></a>
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    <p align="center">{{i.name}}</p>
+                                </h4>
+                                <h5 align="center">{{i.price}}$</h5>
+                                <p class="card-text" align="center">{{i.text|truncatechars:30}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">last updated {{i.create_data}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+                <!-- /.row -->
+
+            </div>
+
+            <!-- /.col-lg-9 -->
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <section class="">
+        <!-- Footer -->
+        <footer class="text-center text-white" style="background-color: #d3d3d3;">
+            <!-- Grid container -->
+            <div class="container p-1 pb-0">
+                <!-- Section: CTA -->
+                <section class="mt-2">
+                    <p class="d-flex justify-content-center align-items-center" style="color: black;">
+                        {% if user.is_authenticated %}
+                        <span class="me-3">Welcome back, {{ user.username }}</span>
+                        {% else %}
+                        <span class="me-3">Register for free </span>
+                        <a class="btn btn-outline-dark ml-4" href="{% url 'account_signup' %}"> Sign up</a>
+                        {% endif %}
+                    </p>
+                </section>
+                <!-- Section: CTA -->
+            </div>
+            <!-- Grid container -->
+
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2); color: black;">
+                © 2020 Copyright:
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- Footer -->
+    </section>
+    {% endblock %}
+
+    </body>
+    </html>
+</>

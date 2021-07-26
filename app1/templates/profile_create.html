@@ -1,0 +1,27 @@
+{% extends 'profile.html' %}
+    {% block content %}
+    {% load static %}
+    <body>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'app1/css/profile.css' %}">
+
+
+    <div class="container emp-profile">
+        <h4 class="ml-4">Create</h4>
+        <form class="ml-4 mt-4" id="update_data" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+        </form>
+        <a href="{% url 'home' %}">
+            <button form="update_data" type="submit"
+                    class="btn btn-primary ml-4 mt-4">Apply
+            </button>
+        </a>
+    </div>
+    </body>
+
+
+    {% endblock %}</>
