@@ -150,7 +150,15 @@
                         </div>
                     </div>
                     {% endfor %}
-
+                        <ul>
+                            {% for p in paginator.page_range %}
+                            {% if p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+                            <li class="">
+                                <a href="?page={{ p }}">{{ p }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
                 </div>
 
                 <!-- /.row -->

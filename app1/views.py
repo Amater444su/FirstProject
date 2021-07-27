@@ -15,6 +15,7 @@ from .utils import count_total_product_amount
 
 class ProductListView(ListView):
     """Выводит список всех товаров"""
+    paginate_by = 6
     template_name = 'home.html'
     context_object_name = 'list_products'
 
