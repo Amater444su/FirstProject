@@ -38,7 +38,6 @@ class Product(models.Model):
                               verbose_name='Картинка')
     type = models.CharField(choices=ProductType.choices, max_length=40)  # 'choices' передаю свой класс 'ProductType'
 
-
     def __str__(self):
         return self.name
 

@@ -45,7 +45,7 @@ class ProductListView(ListView):
         return queryset
 
 
-class HomeDetailView(DetailView, FormMixin, SuccessMessageMixin):
+class ProductDetailView(DetailView, FormMixin, SuccessMessageMixin):
     """Вывод определенного товара с БД"""
     model = Product
     template_name = 'detail.html'
@@ -70,7 +70,6 @@ class HomeDetailView(DetailView, FormMixin, SuccessMessageMixin):
         return reverse_lazy('detail', kwargs={'pk': self.get_object().id})
 
 
-
 class ProductCreateView(LoginRequiredMixin, CreateView):
     """Создание товара в БД"""
     model = Product
@@ -86,7 +85,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
-        self.object.save
+        self.object.save()
         return super().form_valid(form)
 
 
@@ -227,12 +226,15 @@ class ProductDeleteFromCartView(View):
         return HttpResponseRedirect('/cart/')
 
 
-def get_email(request, pk):
+def get_email(request, pk, product_id):
     """Отправка емейла владельцу товара"""
-    # ipdb.set_trace()
-    message = Message.objects.filter(id=pk+1).first()
-
-    send_mail(str(message.topic), str(message.text), settings.EMAIL_HOST_USER, ['hikosif724@dmsdmg.com'],
+    if Message.objects.count() == 0:
+        message = Message.objects.last()
+    else:
+        message = Message.objects.filter(id=pk+1).first()
+    ipdb.set_trace()
+    product = Product.objects.filter(id=product_id).first()
+    send_mail(str(message.topic), str(message.text), settings.EMAIL_HOST_USER, [product.author.email],
               fail_silently=False)
 
     return HttpResponseRedirect('/')
@@ -268,7 +270,6 @@ class ProductDeleteFromWishListView(LoginRequiredMixin, View):
     """Удаление связи список желаний и продукта"""
 
     def get(self, request, pk):
-        # ipdb.set_trace()
         user = request.user
         product = Product.objects.filter(id=pk).first()
         wishlist = WishList.objects.filter(author=user).first()
@@ -279,20 +280,20 @@ class ProductDeleteFromWishListView(LoginRequiredMixin, View):
 
 class SendMessageView(LoginRequiredMixin, CreateView):
     """Cоздание сообщения"""
-    # ipdb.set_trace()
     model = Message
     template_name = 'Message.html'
     context_object_name = 'message'
     message = Message.objects.last()
     form_class = MessageForm
-    success_url = reverse_lazy('email', kwargs={'pk': message.id})
-
 
     def form_valid(self, form):
-        #ipdb.set_trace()
         user = Profile.objects.filter(id=self.request.user.id).first()
         self.object = form.save(commit=False)
         self.object.writer = self.request.user
         self.object.email = user.email
-        self.object.save
+        self.object.save()
         return super().form_valid(form)
+
+    def get_success_url(self):
+        product_id = self.kwargs['pk']
+        return reverse('email', kwargs={'pk': self.message.id, 'product_id': product_id})

@@ -19,7 +19,7 @@ class MessageAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [CommentAdmin, ]
-    list_display = ('id', 'name', 'price', 'create_data')
+    list_display = ('id', 'author', 'name', 'price', 'create_data')
     list_filter = ('price', 'create_data')
 
 
