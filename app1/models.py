@@ -10,7 +10,7 @@ class Profile(AbstractUser):
             regex=r'^\+?1?\d{9,15}$',
             message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     ])
-    profile_image = models.ImageField(default='/home/pavel/Projects/e-com/static/static_images/in.jpg',
+    profile_image = models.ImageField(default='/static/static_images/in.jpg',
                                       upload_to='images_profile/', null=True, blank=True, verbose_name='Картинка')
 
 
@@ -34,7 +34,7 @@ class Product(models.Model):
     name = models.CharField(max_length=30, verbose_name='Имя')
     text = models.TextField()
     price = models.IntegerField(null=True, verbose_name='Цена')
-    image = models.ImageField(default='/home/pavel/Projects/e-com/static/static_images/no.png',
+    image = models.ImageField(default='/static/static_images/no.png',
                               upload_to='static_images/', null=True, blank=True,
                               verbose_name='Картинка')
     type = models.CharField(choices=ProductType.choices, max_length=40)  # 'choices' передаю свой класс 'ProductType'
@@ -68,11 +68,11 @@ class WishList(models.Model):
     total_products = models.PositiveIntegerField(default=0)
 
 
-class Message(models.Model):
-    writer = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Автор сообщения',
-                               related_name='writer_mes')
-    topic = models.CharField(max_length=40, blank=True, null=True, verbose_name='Тема сообщения')
-    text = models.TextField(blank=True, null=True, verbose_name='Текст сообщения')
-    email = models.EmailField(verbose_name='Емейл', blank=True)
+# class Message(models.Model):
+#     writer = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Автор сообщения',
+#                                related_name='writer_mes')
+#     topic = models.CharField(max_length=40, blank=True, null=True, verbose_name='Тема сообщения')
+#     text = models.TextField(blank=True, null=True, verbose_name='Текст сообщения')
+#     email = models.EmailField(verbose_name='Емейл', blank=True)
 
 

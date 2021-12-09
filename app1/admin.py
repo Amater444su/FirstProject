@@ -4,7 +4,7 @@ from .models import (
     Profile,
     Comment,
     WishList,
-    Message
+    # Message
 
 )
 
@@ -13,8 +13,8 @@ class CommentAdmin(admin.TabularInline):
     model = Comment
 
 
-class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'topic', 'text')
+# class MessageAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'topic', 'text')
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -36,5 +36,5 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Comment)
 admin.site.register(WishList)
-admin.site.register(Message, MessageAdmin)
+# admin.site.register(Message, MessageAdmin)
 

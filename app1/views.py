@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView, View
 from django.views.generic.edit import FormMixin
-from .models import Product, ProductType, Cart, Comment, Profile, WishList, Message
-from .forms import ProductForm, CommentForm, UserForm, MessageForm
+from .models import Product, ProductType, Cart, Comment, Profile, WishList # Message
+from .forms import ProductForm, CommentForm, UserForm#, MessageForm
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import count_total_product_amount
@@ -226,18 +226,20 @@ class ProductDeleteFromCartView(View):
         return HttpResponseRedirect('/cart/')
 
 
-def get_email(request, pk, product_id):
-    """Отправка емейла владельцу товара"""
-    if Message.objects.count() == 0:
-        message = Message.objects.last()
-    else:
-        message = Message.objects.filter(id=pk+1).first()
-    ipdb.set_trace()
-    product = Product.objects.filter(id=product_id).first()
-    send_mail(str(message.topic), str(message.text), settings.EMAIL_HOST_USER, [product.author.email],
-              fail_silently=False)
-
-    return HttpResponseRedirect('/')
+# def get_email(request, pk, product_id):
+#     """Отправка емейла владельцу товара"""
+#     if Message.objects.count() == 0:
+#         message = Message.objects.last()
+#     else:
+#         try:
+#             message = Message.objects.filter(id=pk+1).first()
+#         except ValueError:
+#             message = Message.objects.filter(id=pk).first()
+#     product = Product.objects.filter(id=product_id).first()
+#     send_mail(str(message.topic), str(message.text), settings.EMAIL_HOST_USER, [product.author.email],
+#               fail_silently=False)
+#
+#     return HttpResponseRedirect('/')
 
 
 class WishListView(LoginRequiredMixin, View):
@@ -278,22 +280,22 @@ class ProductDeleteFromWishListView(LoginRequiredMixin, View):
         return HttpResponseRedirect('/profile/')
 
 
-class SendMessageView(LoginRequiredMixin, CreateView):
-    """Cоздание сообщения"""
-    model = Message
-    template_name = 'Message.html'
-    context_object_name = 'message'
-    message = Message.objects.last()
-    form_class = MessageForm
-
-    def form_valid(self, form):
-        user = Profile.objects.filter(id=self.request.user.id).first()
-        self.object = form.save(commit=False)
-        self.object.writer = self.request.user
-        self.object.email = user.email
-        self.object.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        product_id = self.kwargs['pk']
-        return reverse('email', kwargs={'pk': self.message.id, 'product_id': product_id})
+# class SendMessageView(LoginRequiredMixin, CreateView):
+#     """Cоздание сообщения"""
+#     model = Message
+#     template_name = 'Message.html'
+#     context_object_name = 'message'
+#     message = Message.objects.last()
+#     form_class = MessageForm
+#
+#     def form_valid(self, form):
+#         user = Profile.objects.filter(id=self.request.user.id).first()
+#         self.object = form.save(commit=False)
+#         self.object.writer = self.request.user
+#         self.object.email = user.email
+#         self.object.save()
+#         return super().form_valid(form)
+#
+#     def get_success_url(self):
+#         product_id = self.kwargs['pk']
+#         return reverse('email', kwargs={'pk': self.message.id, 'product_id': product_id})

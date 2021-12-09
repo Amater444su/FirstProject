@@ -15,7 +15,7 @@ SECRET_KEY = '8engtxu^6c%rw1#vq0gwzq2x-x77zz2u05(vde%_dwomt_ee*e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['pavel-first-deploy.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -72,23 +72,35 @@ WSGI_APPLICATION = 'somesite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-#DATABASES = {
+# DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'dje',
-#       'USER': 'pavel',
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'ecom_db',
+#        'USER': 'pavel',
 #        'PASSWORD': 'password',
-#        'HOST': 'localhost',
-#        'PORT': 5433,
+#        'HOST': '127.0.0.1',
+#        'PORT': '5433',
 #    }
-#}
+# }
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db.sqlite3',
-     }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'ecomdb',
+       'USER': 'admin',
+       'PASSWORD': 'admin123',
+       'HOST': 'postgresdb',
+       'PORT': 5432
+   }
 }
+
+
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.sqlite3',
+#          'NAME': BASE_DIR / 'db.sqlite3',
+#      }
+# }
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -139,9 +151,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-STATIC_URL = '/home/pavel/Projects/e-com/static/'
+STATIC_URL = '/static/'
 
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static"

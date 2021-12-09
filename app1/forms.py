@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Comment, Profile, Message
+from .models import Product, Comment, Profile # Message
 
 
 class ProductForm(forms.ModelForm):
@@ -38,14 +38,14 @@ class UserForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
 
 
-class MessageForm(forms.ModelForm):
-
-    class Meta:
-        model = Message
-        fields = ['topic', 'text']
-
-    def __init__(self,  *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+# class MessageForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = Message
+#         fields = ['topic', 'text']
+#
+#     def __init__(self,  *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         for field in self.fields:
+#             self.fields[field].widget.attrs['class'] = 'form-control'
 

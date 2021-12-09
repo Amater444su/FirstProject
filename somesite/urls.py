@@ -7,7 +7,7 @@ from app1 import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),  # include включает все сылки с того что в скобочках ('')
+    path('accounts/', include('allauth.urls')),
     path('', views.ProductListView.as_view(), name='home'),
     path('detail/<int:pk>', views.ProductDetailView.as_view(), name='detail'),
     path('profile/detail/<int:pk>', views.ProductDetailView.as_view(), name='detail_profile'),
@@ -22,10 +22,10 @@ urlpatterns = [
     path('profile_update/<int:pk>', views.ProfileUpdateView.as_view(), name='profile_update'),
     path('profile_create/', views.ProfileProductCreateView.as_view(), name='profile_create'),
     path('cart/<int:pk>', views.ProductDeleteFromCartView.as_view(), name='cart_delete'),
-    path('email/<int:pk>/<int:product_id>', views.get_email, name='email'),
+    # path('email/<int:pk>/<int:product_id>', views.get_email, name='email'),
     path('products/<int:product_id>/wishlist', views.WishListView.as_view(), name='add_to_wishlist'),
     path('wishlist/<int:pk>', views.ProductDeleteFromWishListView.as_view(), name='wishlist_delete'),
-    path('message/<int:pk>', views.SendMessageView.as_view(), name='get_message'),
+    # path('message/<int:pk>', views.SendMessageView.as_view(), name='get_message'),
 
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
